@@ -380,6 +380,21 @@
 \tikzstyle{ndensely dashdotted}=      [dash pattern=on 3pt off 1pt on \the\pgflinewidth off 1pt]
 \tikzstyle{nloosely dashdotted}=      [dash pattern=on 3pt off 4pt on \the\pgflinewidth off 4pt]
 
+\usepackage{xspace}
+\usepackage[acronym, number=none , style=list, toc]{glossary} 
+
+\newacronym[nlim]{NLIM}{Neighbouring Link Inference Method}{description={}}
+\newacronym[mape]{MAPE}{Mean Absolute Percentage Error}{description={}}
+\newacronym[nlim-sms]{NLIM-SMS}{NLIM with Similar Model Searching}{description={}}
+
+\newcommand{\fref}[1]{Figure~\ref{#1}}
+\newcommand{\tref}[1]{Table~\ref{#1}}
+\newcommand{\eref}[1]{Equation~\ref{#1}}
+\newcommand{\cref}[1]{Chapter~\ref{#1}}
+\newcommand{\sref}[1]{Section~\ref{#1}}
+\newcommand{\aref}[1]{Appendix~\ref{#1}}
+
+
 \begin{document}
 %
 % paper title
@@ -506,29 +521,56 @@ travel times, sparse data, estimation, artificial neural network, traffic model
 % 
 % Here we have the typical use of a "T" for an initial drop letter
 % and "HIS" in caps to complete the first word.
-\IEEEPARstart{T}{raffic} congestion is becoming increasingly problematic issue for major cities across the globe. Accoring to \cite{Cookson2017} in the United Kingdom the estimated cost of congestion in 2017 was more than $\pounds$37.7 billion; with London ranked the 7th most congested city in the world. Congestion can be defined as the traffic demand exceeding the roadway capacity. While a number of works were undertaken to increase UK transport network capacity, in urban areas, transportation infrastructure development is constrained by land and financial resources \cite{Petrovska2015}. Another approach to deal with congestion is by improving the current traffic management strategies \cite{Capes2005}. However, to effectively respond to daily traffic challenges operators need current travel times data or accurate models of travel time. 
-
-
-Travel time, average speed (the total distance travelled by a vehicle divided by the elapsed time to cover that distance), congestion level (slower speeds, longer trip times, and increased vehicular queueing, etc.), traffic flow (flow of vehicles on a lane) and traffic delay (time difference between actual travel time and free-flow travel time) of a traffic segment/link are intercorrelated. A vital performance indicator of the traffic network is the travel time parameter. Travel time estimation is defined as the method which approximates the travel time of vehicles on a given link during a given period. Data from GNSS equipment, loop detectors, camera surveillance systems and other existing technologies can be used to approximate travel times in near real-time.
+\IEEEPARstart{T}{raffic} congestion is becoming increasingly problematic issue for major cities across the globe. According to \cite{Cookson2017} in the United Kingdom the estimated cost of congestion in 2017 was more than $\pounds$37.7 billion; with London ranked the 7th most congested city in the world. Congestion can be defined as the traffic demand exceeding the roadway capacity. While a number of works were undertaken to increase UK transport network capacity, in urban areas, transportation infrastructure development is constrained by land and financial resources \cite{Petrovska2015}. Another approach to deal with congestion is by improving the current traffic management strategies \cite{Capes2005}. However, to effectively respond to daily traffic challenges operators need current travel times data or accurate models of travel time. 
 
 
 Travel time can be measured and collected typically by using stationary observers or moving observers. Stationary observers include loop detectors and video surveillance, which provide flow and speed estimation at regular and frequent intervals. Moving observers, consisting of floating cars, probe cars, vehicle fleets with GPS devices or smartphones, provide information which can be used to extract travel time data in road segments where the moving observers go through \cite{Ma2008}. Travel time data source directly influences the property of travel time data. Stationary observers can collect travel time data at regular and frequent intervals. However, the share of segments in the network equipped with these observers is typically low and not representative of the urban network as a whole, which leaves the traffic conditions in most of the network unknown \cite{Jenelius2013}. In contrast, the moving observers can collect travel time data at irregular, less frequent intervals and in limited duration of time, which means that, for a particular time of a day of a road segment, there might not be any travel time data available. Also, the moving observers enable collection of travel time information across the entire urban road network \cite{Jones2013, Ma2008}. 
 
+Travel time data on motorways regularly show relatively low variability (the variabilities are less than 3.5 seconds/km), especially in congested conditions. The enforced speed limit reduces the speed difference between vehicles, which results in a lower travel time variability. \cite{Tu2006} indicated that the travel time variability mainly depends on geometrical characteristics of motorways; e.g. the number of ramps weaving sections per unit road length (ramps refer to interchanges which permit traffic on a motorway to pass through the junction without interruption from any other traffic stream, the number of lanes etc. In contrast, the urban travel times can be subject to very high variability because of traffic light signal cycles and queue delays. Pedestrians and cyclists and on-street parking also affect travel time, \cite{Hinsbergen2011a, Ma2008}. This poses a challenge to design models or algorithms that can estimate accurately near real-time travel time in urban areas.
 
-\subsection{Subsection Heading Here}
-Subsection text here.
+In our earlier work in \cite{Vu2017}, we intoduced the \nlim to deal with the highly sparse data collected from moving observers in a large-scale urban traffic network. The \nlim learns the relationship between travel time of a road segment (link) and traffic parameters (travel time, vehicle class, time of day, day of week) of its nearby links using feed forward back propagation neural network (FF-BP-ANN). Subsequently, the \nlim model is used to estimate near real-time travel time for links, which do not have recently observed travel time data. An outlier detection based on the Gaussian mixture model was proposed in order to reduce noises of travel time data. Comparative studies have shown that the \nlim method outperforms the statistic-based method and linear least square estimation method. However, the \nlim performs better on major links than minor links; it produces higher \mape for the minor links than the major links. 
 
-% needed in second column of first page if using \IEEEpubid
-%\IEEEpubidadjcol
-
-\subsubsection{Subsubsection Heading Here}
-Subsubsection text here.
+As a substantial extension of our previous works \cite{Vu2017}, this paper aims to improve the performance of the \nlim, especially for the minor links, as the vast majority (70\%) of links in the UK fall within the minor link category \cite{DepartmentofTransport2012}. Compared to previous work in \cite{Vu2017}, the NLIM with Similar Model Searching proposed in this paper contains the following new contributions: 1) A similar NLIM model searching algorithm; 2) Utilisation of travel time data of similar models to improve relationship between links in a selected model; 3) Outlier travel time data detection based on the multivariate Gaussian mixture model; 4) Additional performance indicators. Our results demonstrate that the proposed enhanced method can work more effectively with high sparse data rate and enhance the performance of the original method in minor links.
 
 The reminder of this paper is organized as follows. Section \ref{sec:related_work} reviews the related work. The details of the proposed algorithm are given in Section \ref{sec:sms}, followed by Section IV that evaluates the performance of NLIM-SMS, and conclusions are provided in Section \ref{sec:conclusions}.
 
+
+2.3 Travel time models and their roles
+Models are by denition a compressed representation of the actual system, typically consisting
+of the most important aspects or components of the actual system, de Dios Ortuzar
+and G.Willumsen (2011). The quality of the models describes its capabilities
+to resemble the behaviour of a real system. A transportation network due to its size,
+complexity and dynamics is especially challenging to model. An accurate model of a
+transportation network would give insight to the network behaviour and lead to an improved
+decision making and planning transportation-related scenarios, strategies and
+policies.
+In traffic control strategies and traffic management design, real-time travel time estimation
+can help massively to have appropriate responses to consistent changes in the
+transport network and its participants. Such systems can be used to reduce the level of
+congestion in peak hours. As a result, transportation practitioners are very interested
+in a travel time model which can estimate accurately and timely travel time, Lu et al.
+(2018).
+Accurate travel time information is useful, e.g. commuters to make efficient travel
+decisions such as route choice, mode of transport and time of travel. It benefits a traffic
+policy sector in forecasting travel demand. It also helps evaluate the impact of policy
+instruments, e.g. congestion charges, Jenelius and Koutsopoulos (2013), Tang et al.
+(2018).
+Accurate travel estimation plays a crucial role to improve the efficiency of the urban road
+network operation. However, travel time estimation models of an urban traffic network
+is a challenging subject in the intelligent transportation system as the delay from traffic
+signal controls, congestion effects, stochastic incidents, etc. has made urban traffic travel
+Chapter 2. Literature review 15
+time regularly uncertain, Meng et al. (2017). Travel time models can provide travel time
+between locations which is an essential factor of vehicle routing problem, Fleischmann
+et al. (2004), Kim (2017).
+
+
+
 \section{Related Work}
 \label{sec:related_work}
-The existing travel time estimation methods are regularly classified as direct or indirect methodologies \cite{Lu2018}. In the direct approach, the travel time is estimated based on data samples obtained from moving observers, e.g. in-car sensor equipment \cite{Yeon2007,Ernst2014,Guo2015}, GNSS-based floating car \cite{Fabritiis2008,Hadachi2013,Maiti2014,Rahmani2014,Wang2012,Jones2013,Su2010,Lee2017,DepartmentofTransport2016}, automated vehicle identification (AVI) system \cite{Rahmani2014,Ma2008}, telecommunication activities \cite{Vidovic2017, Derrmann2016, Chitraranjan2016, Chitraranjan2015}. Furthermore, travel times can be estimated from locations of drivers' smartphones, from car satellite navigations systems or large car fleets operators. 
+%Travel time, average speed (the total distance travelled by a vehicle divided by the elapsed time to cover that distance), congestion level (slower speeds, longer trip times, and increased vehicular queueing, etc.), traffic flow (flow of vehicles on a lane) and traffic delay (time difference between actual travel time and free-flow travel time) of a traffic segment/link are intercorrelated. A vital performance indicator of the traffic network is the travel time parameter. Travel time estimation is defined as the method which approximates the travel time of vehicles on a given link during a given period. Data from GNSS equipment, loop detectors, camera surveillance systems and other existing technologies can be used to approximate travel times in near real-time.
+
+The existing travel time estimation methods are regularly classified as direct or indirect methodologies \cite{Lu2018}. In the direct approach, the travel time is estimated based on data samples obtained from moving observers, e.g. in-car sensor equipment \cite{Yeon2007,Ernst2014,Guo2015}, GNSS-based floating car \cite{Fabritiis2008,Hadachi2013,Maiti2014,Rahmani2014,Wang2012,Jones2013,Su2010,Lee2017,DepartmentofTransport2016}, automated vehicle identification (AVI) system \cite{Rahmani2014,Ma2008}, telecommunication activities \cite{Vidovic2017, Derrmann2016, Chitraranjan2016, Chitraranjan2015}. Furthermore, travel times can be estimated from locations of drivers' smart phones, from car satellite navigations systems or large car fleets operators. 
 
 The advantage of the direct method is that it requires limited expenses of infrastructure and it is capable of producing travel time data in small roads where loop detectors may not be deployed. The drawback of the direct method is that for example a car cannot collect data in different locations simultaneously. Also at different times the particular road may exhibit different dynamics which may not be captured by a car. Hence, uncovering a methodology for travel time estimation from incomplete datasets receives a great interest from researchers in the field of the intelligent transport systems.
 
@@ -554,6 +596,32 @@ The application of machine learning techniques in traffic models and the develop
 \section{Similar Model Searching Method} 
 \label{sec:sms}
 \subsection{Definitions}
+\subsubsection{Traffic link classification}
+Different road categories produce different traffic travel time. In this research classification by \cite{DepartmentofTransport2012} is adopted.  The road categories in \cite{DepartmentofTransport2012} are defined in detail in Table \ref{table:roadcategories}. In this research, the major link refers to a combination of the motorway, trunk, primary and A link. Meanwhile, the minor link  refers to the remaining road categories.
+\begin{table}[!t]
+	\small
+	\caption{UK Road Categories \cite{DepartmentofTransport2012}.}
+	\label{table:roadcategories}
+	\begin{tabular}{p{2cm}p{4.5cm}p{1.5cm}}
+		\hline
+		Category&		Definition&	Type\\
+		\hline
+		Motorway&	It is classified as special road where certain types of traffic is prohibited. This arrangement is determined by statute.&	Major\\
+		&	&	\\
+		Trunk road&	It is nationally important road which is used for the distribution of goods and services and a network for the travelling public.&	Major\\
+		&	&	\\
+		Primary road&	It provides most satisfactory transport for a regional or county level. It is mainly feeding into the Trunk roads for longer journeys.&	Major\\
+		&	&	\\
+		A road&	It is a large-scale transport link which provides transport within or between areas.& Major\\
+		\hline
+		B road&	It connects different areas. It is usually feeding traffic into A roads and smaller roads on the network.&	Minor\\
+		&	&	\\
+		Minor road (Classified unnumbered and Unclassified)& It is the smallest road that connects unclassified roads with A and B roads. It is regularly connecting a housing estate to the rest of the network. It is for local traffic.&	Minor\\
+		\hline
+	\end{tabular}
+\end{table}
+
+
 \subsection{SMS}
 The backbone of this methodology is 
 
@@ -687,7 +755,7 @@ To demonstrate the advantages of NLIM models in different machine learning techn
 Input features for training and testing NLIM models in a link layout using the proposed method are sparse historical travel time of neighbouring links, time of day(time slot), vehicle class and day of a week. Day of a week is inferred from the date. Output feature is travel time corresponding to the input features of a target link.
 
 13527 links produce 13527 link layouts. There are 338177 traffic link models in total. The models  are carefully trained and verified to make sure relationships between temporal and spatial of travel times in links correctly learnt. The performances of models are evaluated by RMSE, MAE and MAPE performance metrics on unseen data. Outliers of data set on 13527 traffic links are detected and removed using the proposed DR-M-GMM (Algorithm \ref{alg:outlieralgorithm}). The parameter $k$ and $\gamma$ are set up as mentioned in Section \ref{NLIMmethod} ($k$ = 5, $\gamma$ = 0.1).
-
+\subsection{Performance criteria}
 \subsection{Results}
 
 \begin{figure}[!t]
